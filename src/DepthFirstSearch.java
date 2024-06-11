@@ -4,11 +4,13 @@ public class DepthFirstSearch<T> implements Search<T> {
     private final Map<T, T> edgeTo;
     private final Set<T> marked;
     private final T source;
+    private final Comparator<Vertex<T>> comparator;
 
-    public DepthFirstSearch(WeightedGraph<T> graph, T source) {
+    public DepthFirstSearch(WeightedGraph<T> graph, T source, Comparator<Vertex<T>> comparator) {
         this.edgeTo = new HashMap<>();
         this.marked = new HashSet<>();
         this.source = source;
+        this.comparator = comparator;
 
         // Start DFS from the source
         dfs(graph, source);
@@ -24,7 +26,11 @@ public class DepthFirstSearch<T> implements Search<T> {
             Vertex<T> vertex = graph.getVertex(current);
 
             if (vertex != null) {
-                for (Vertex<T> neighbor : vertex.getAdjacentVertices().keySet()) {
+                // Get neighbors in a deterministic order
+                List<Vertex<T>> neighbors = new ArrayList<>(vertex.getAdjacentVertices().keySet());
+                neighbors.sort(comparator);
+
+                for (Vertex<T> neighbor : neighbors) {
                     T neighborData = neighbor.getData();
                     if (!marked.contains(neighborData)) {
                         marked.add(neighborData);

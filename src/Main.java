@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public class Main {
     public static void main(String[] args) {
         // Weighted graph for Dijkstra's Algorithm
@@ -15,8 +17,9 @@ public class Main {
         fillWithWeights(graph);
 
         System.out.println("DFS:");
-        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
-        outputPath(dfs, "Astana");
+        Comparator<Vertex<String>> vertexComparator = Comparator.comparing(Vertex::getData);
+        Search<String> dfs = new DepthFirstSearch<>(weightedGraph, "Almaty", vertexComparator);
+        outputPath(dfs, "Kyzylorda");
 
         System.out.println("--------------------------------");
 
