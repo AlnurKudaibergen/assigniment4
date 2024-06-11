@@ -20,8 +20,8 @@ public class Main {
         graph.addVertex(kostanay);
         graph.addVertex(kyzylorda);
 
-        // Adding edges with weights
-        fillWithWeights(graph);
+        // Adding edges with weights using existing vertex references
+        fillWithWeights(graph, almaty, astana, shymkent, atyrau, kostanay, kyzylorda);
 
         // Initialize search algorithms (e.g., Dijkstra's)
         DijkstraSearch<String> dijkstra = new DijkstraSearch<>(graph);
@@ -31,14 +31,16 @@ public class Main {
         outputPath(dijkstra, kyzylorda);
     }
 
-    public static void fillWithWeights(WeightedGraph<String> graph) {
-        graph.addEdge(new Vertex<>("Almaty"), new Vertex<>("Astana"), 2.1);
-        graph.addEdge(new Vertex<>("Shymkent"), new Vertex<>("Atyrau"), 7.8);
-        graph.addEdge(new Vertex<>("Atyrau"), new Vertex<>("Astana"), 7.1);
-        graph.addEdge(new Vertex<>("Almaty"), new Vertex<>("Shymkent"), 7.2);
-        graph.addEdge(new Vertex<>("Shymkent"), new Vertex<>("Astana"), 3.9);
-        graph.addEdge(new Vertex<>("Astana"), new Vertex<>("Kostanay"), 3.5);
-        graph.addEdge(new Vertex<>("Shymkent"), new Vertex<>("Kyzylorda"), 5.4);
+    public static void fillWithWeights(WeightedGraph<String> graph, Vertex<String> almaty, Vertex<String> astana,
+                                       Vertex<String> shymkent, Vertex<String> atyrau, Vertex<String> kostanay,
+                                       Vertex<String> kyzylorda) {
+        graph.addEdge(almaty, astana, 2.1);
+        graph.addEdge(shymkent, atyrau, 7.8);
+        graph.addEdge(atyrau, astana, 7.1);
+        graph.addEdge(almaty, shymkent, 7.2);
+        graph.addEdge(shymkent, astana, 3.9);
+        graph.addEdge(astana, kostanay, 3.5);
+        graph.addEdge(shymkent, kyzylorda, 5.4);
     }
 
     public static void outputPath(Search<String> search, Vertex<String> end) {
