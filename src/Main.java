@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
         // Weighted graph for Dijkstra's Algorithm
-        WeightedGraph<String> weightedGraph = new WeightedGraph<>(true);
+        WeightedGraph<String> weightedGraph = new WeightedGraph<>(false);
         fillWithWeights(weightedGraph);
 
         System.out.println("Dijkstra:");
@@ -11,8 +11,7 @@ public class Main {
         System.out.println("--------------------------------");
 
         // Unweighted graph for BFS and DFS
-        WeightedGraph<String> graph = new WeightedGraph<>(true);
-        fillWithoutWeights(graph);
+//        WeightedGraph<String> graph = new WeightedGraph<>(true);
 
 //        System.out.println("DFS:");
 //        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
@@ -21,8 +20,8 @@ public class Main {
         System.out.println("--------------------------------");
 
         System.out.println("BFS:");
-        Search<String> bfs = new BreadthFirstSearch<>(graph, "Shymkent");
-        outputPath(bfs, "Astana");
+        Search<String> bfs = new BreadthFirstSearch<>(weightedGraph, "Almaty");
+        outputPath(bfs, "Atyrau");
     }
 
     public static void fillWithoutWeights(WeightedGraph<String> graph) {
@@ -33,13 +32,13 @@ public class Main {
         graph.addVertex("Kostanay");
         graph.addVertex("Kyzylorda");
 
-        graph.addEdge("Almaty", "Astana", 0); // Even though BFS doesn't use weights, adding 0 for consistency
-        graph.addEdge("Almaty", "Shymkent", 0);
-        graph.addEdge("Shymkent", "Atyrau", 0);
-        graph.addEdge("Atyrau", "Astana", 0);
-        graph.addEdge("Shymkent", "Astana", 0);
-        graph.addEdge("Astana", "Kostanay", 0);
-        graph.addEdge("Shymkent", "Kyzylorda", 0);
+        graph.addEdge("Almaty", "Astana", 2.1);
+        graph.addEdge("Shymkent", "Atyrau", 7.8);
+        graph.addEdge("Atyrau", "Astana", 7.1);
+        graph.addEdge("Almaty", "Shymkent", 7.2);
+        graph.addEdge("Shymkent", "Astana", 3.9);
+        graph.addEdge("Astana", "Kostanay", 3.5);
+        graph.addEdge("Shymkent", "Kyzylorda", 5.4);
     }
 
     public static void fillWithWeights(WeightedGraph<String> graph) {
@@ -50,13 +49,13 @@ public class Main {
         graph.addVertex("Kostanay");
         graph.addVertex("Kyzylorda");
 
-        graph.addEdge("Almaty", "Astana", 1.1);
-//        graph.addEdge("Shymkent", "Atyrau", 1.8);
-        graph.addEdge("Atyrau", "Astana", 1.1);
-//        graph.addEdge("Almaty", "Shymkent", 1.2);
-//        graph.addEdge("Shymkent", "Astana", 1.9);
-        graph.addEdge("Astana", "Kostanay", 1.5);
-//        graph.addEdge("Shymkent", "Kyzylorda", 1.4);
+        graph.addEdge("Almaty", "Astana", 2.1);
+        graph.addEdge("Shymkent", "Atyrau", 7.8);
+        graph.addEdge("Atyrau", "Astana", 7.1);
+        graph.addEdge("Almaty", "Shymkent", 7.2);
+        graph.addEdge("Shymkent", "Astana", 3.9);
+        graph.addEdge("Astana", "Kostanay", 3.5);
+        graph.addEdge("Shymkent", "Kyzylorda", 5.4);
     }
 
     public static void outputPath(Search<String> search, String destination) {
