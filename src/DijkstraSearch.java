@@ -1,19 +1,23 @@
 import java.util.*;
 
 public class DijkstraSearch<T> implements Search<T> {
-    private Map<T, T> edgeTo;
-    private Map<T, Double> distTo;
-    private PriorityQueue<Vertex<T>> pq;
+    private final Map<T, T> edgeTo;
+    private final Map<T, Double> distTo;
+    private final PriorityQueue<Vertex<T>> pq;
 
     public DijkstraSearch(WeightedGraph<T> graph, T source) {
         edgeTo = new HashMap<>();
         distTo = new HashMap<>();
         pq = new PriorityQueue<>(Comparator.comparingDouble(v -> distTo.getOrDefault(v.getData(), Double.POSITIVE_INFINITY)));
 
+        // Initialize distances to infinity
         for (T v : graph.vertices.keySet()) {
             distTo.put(v, Double.POSITIVE_INFINITY);
         }
+        // Set distance to source to 0
         distTo.put(source, 0.0);
+
+        // Add the source vertex to the priority queue
         Vertex<T> sourceVertex = graph.getVertex(source);
         if (sourceVertex != null) {
             pq.offer(sourceVertex);
@@ -21,9 +25,11 @@ public class DijkstraSearch<T> implements Search<T> {
             System.err.println("Source vertex is null: " + source);
         }
 
+        // Process the priority queue
         while (!pq.isEmpty()) {
             Vertex<T> v = pq.poll();
             if (v == null) continue; // Safeguard against null vertices
+
             for (Map.Entry<Vertex<T>, Double> entry : v.getAdjacentVertices().entrySet()) {
                 relax(v, entry.getKey(), entry.getValue());
             }
@@ -33,15 +39,18 @@ public class DijkstraSearch<T> implements Search<T> {
     private void relax(Vertex<T> v, Vertex<T> w, double weight) {
         T vData = v.getData();
         T wData = w.getData();
-        if (distTo.get(wData) == null) {
-            System.err.println("distTo missing entry for: " + wData);
-            return;
-        }
-        if (distTo.get(wData) > distTo.get(vData) + weight) {
-            distTo.put(wData, distTo.get(vData) + weight);
+        double newDist = distTo.get(vData) + weight;
+
+        if (distTo.get(wData) > newDist) {
+            distTo.put(wData, newDist);
             edgeTo.put(wData, vData);
-            pq.remove(w); // Remove old instance of w with the higher distance
-            pq.offer(w); // Add new instance of w with the updated distance
+
+            // Update priority queue: remove and re-add the vertex to update its position
+            pq.remove(w);
+            pq.offer(w);
+
+            System.out.println("Relaxing edge from " + vData + " to " + wData + " with weight " + weight);
+            System.out.println("Updated distance to " + wData + ": " + newDist);
         }
     }
 
