@@ -1,57 +1,77 @@
 import java.util.*;
 
+
 public class Main {
     public static void main(String[] args) {
-        WeightedGraph<String> graph = new WeightedGraph<>();
+        // Weighted graph for Dijkstra's Algorithm
+        WeightedGraph<String> weightedGraph = new WeightedGraph<>(true);
+        fillWithWeights(weightedGraph);
 
-        // Creating vertices
-        Vertex<String> almaty = new Vertex<>("Almaty");
-        Vertex<String> astana = new Vertex<>("Astana");
-        Vertex<String> shymkent = new Vertex<>("Shymkent");
-        Vertex<String> atyrau = new Vertex<>("Atyrau");
-        Vertex<String> kostanay = new Vertex<>("Kostanay");
-        Vertex<String> kyzylorda = new Vertex<>("Kyzylorda");
+//        System.out.println("Dijkstra:");
+//        Search<String> dijkstra = new DijkstraSearch<>(weightedGraph, "Almaty");
+//        outputPath(dijkstra, "Kyzylorda");
 
-        // Adding vertices to the graph
-        graph.addVertex(almaty);
-        graph.addVertex(astana);
-        graph.addVertex(shymkent);
-        graph.addVertex(atyrau);
-        graph.addVertex(kostanay);
-        graph.addVertex(kyzylorda);
+        System.out.println("--------------------------------");
 
-        // Adding edges with weights using existing vertex references
-        fillWithWeights(graph, almaty, astana, shymkent, atyrau, kostanay, kyzylorda);
+        // Unweighted graph for BFS and DFS
+        WeightedGraph<String> graph = new WeightedGraph<>(true);
+        fillWithoutWeights(graph);
 
-        // Initialize search algorithms (e.g., Dijkstra's)
-        DijkstraSearch<String> dijkstra = new DijkstraSearch<>(graph);
-        dijkstra.search(almaty);
+//        System.out.println("DFS:");
+//        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
+//        outputPath(dfs, "Kyzylorda");
+//
+//        System.out.println("--------------------------------");
 
-        // Output the path from Almaty to Kyzylorda
-        outputPath(dijkstra, kyzylorda);
+        System.out.println("BFS:");
+        Search<String> bfs = new BreadthFirstSearch<>(graph, "Almaty");
+        outputPath(bfs, "Kyzylorda");
     }
 
-    public static void fillWithWeights(WeightedGraph<String> graph, Vertex<String> almaty, Vertex<String> astana,
-                                       Vertex<String> shymkent, Vertex<String> atyrau, Vertex<String> kostanay,
-                                       Vertex<String> kyzylorda) {
-        graph.addEdge(almaty, astana, 2.1);
-        graph.addEdge(shymkent, atyrau, 7.8);
-        graph.addEdge(atyrau, astana, 7.1);
-        graph.addEdge(almaty, shymkent, 7.2);
-        graph.addEdge(shymkent, astana, 3.9);
-        graph.addEdge(astana, kostanay, 3.5);
-        graph.addEdge(shymkent, kyzylorda, 5.4);
+    public static void fillWithoutWeights(WeightedGraph<String> graph) {
+        graph.addVertex("Almaty");
+        graph.addVertex("Astana");
+        graph.addVertex("Shymkent");
+        graph.addVertex("Atyrau");
+        graph.addVertex("Kostanay");
+        graph.addVertex("Kyzylorda");
+
+        graph.addEdge("Almaty", "Astana", 0); // Even though BFS doesn't use weights, adding 0 for consistency
+        graph.addEdge("Almaty", "Shymkent", 0);
+        graph.addEdge("Shymkent", "Atyrau", 0);
+        graph.addEdge("Atyrau", "Astana", 0);
+        graph.addEdge("Shymkent", "Astana", 0);
+        graph.addEdge("Astana", "Kostanay", 0);
+        graph.addEdge("Shymkent", "Kyzylorda", 0);
     }
 
-    public static void outputPath(Search<String> search, Vertex<String> end) {
-        List<Vertex<String>> path = search.getPath(end);
-        if (path != null) {
-            for (Vertex<String> vertex : path) {
-                System.out.print(vertex + " -> ");
-            }
-            System.out.println("End");
+    public static void fillWithWeights(WeightedGraph<String> graph) {
+        graph.addVertex("Almaty");
+        graph.addVertex("Astana");
+        graph.addVertex("Shymkent");
+        graph.addVertex("Atyrau");
+        graph.addVertex("Kostanay");
+        graph.addVertex("Kyzylorda");
+
+        graph.addEdge("Almaty", "Astana", 2.1);
+        graph.addEdge("Almaty", "Shymkent", 7.2);
+        graph.addEdge("Shymkent", "Atyrau", 7.8);
+        graph.addEdge("Atyrau", "Astana", 7.1);
+        graph.addEdge("Shymkent", "Astana", 3.9);
+        graph.addEdge("Astana", "Kostanay", 3.5);
+        graph.addEdge("Shymkent", "Kyzylorda", 5.4);
+    }
+
+    public static void outputPath(Search<String> search, String destination) {
+        System.out.print("Path to " + destination + ": ");
+        Iterable<String> path = search.pathTo(destination);
+        if (path == null) {
+            System.out.println("No path available.");
         } else {
-            System.out.println("No path found.");
+            for (String v : path) {
+                System.out.print(v + " -> ");
+            }
+            System.out.println("END");
         }
     }
 }

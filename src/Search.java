@@ -1,6 +1,5 @@
 import java.util.*;
 
-public interface Search<V> {
-    void search(Vertex<V> start);
-    List<Vertex<V>> getPath(Vertex<V> end);
+public interface Search<T> {
+    Iterable<T> pathTo(T destination);
 }

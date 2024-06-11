@@ -1,14 +1,31 @@
-import java.util.ArrayList;
 import java.util.*;
 
-public class WeightedGraph<V> {
-    private Map<Vertex<V>, List<Edge<Vertex<V>>>> adjList = new HashMap<>();
+public class WeightedGraph<T> {
+    public Map<T, Vertex<T>> vertices;
+    private boolean isDirected;
 
-    public void addVertex(Vertex<V> vertex) {
-        adjList.putIfAbsent(vertex, new ArrayList<>());
+    public WeightedGraph(boolean isDirected) {
+        this.isDirected = isDirected;
+        vertices = new HashMap<>();
     }
 
-    public void addEdge(Vertex<V> src, Vertex<V> dest, double weight) {
-        adjList.get(src).add(new Edge<>(src, dest, weight));
+    public void addVertex(T data) {
+        vertices.put(data, new Vertex<>(data));
+    }
+
+    public void addEdge(T source, T destination, double weight) {
+        Vertex<T> s = vertices.get(source);
+        Vertex<T> d = vertices.get(destination);
+        if (s == null || d == null) {
+            throw new IllegalArgumentException("Vertex not found!");
+        }
+        s.addAdjacentVertex(d, weight);
+        if (!isDirected) {
+            d.addAdjacentVertex(s, weight);
+        }
+    }
+
+    public Vertex<T> getVertex(T data) {
+        return vertices.get(data);
     }
 }

@@ -1,40 +1,60 @@
 import java.util.*;
 
-public class DijkstraSearch<V> implements Search<V> {
-    private WeightedGraph<V> graph;
-    private Map<Vertex<V>, Vertex<V>> prev = new HashMap<>();
-    private Map<Vertex<V>, Double> dist = new HashMap<>();
+public class DijkstraSearch<T> implements Search<T> {
+    private Map<T, T> edgeTo;
+    private Map<T, Double> distTo;
+    private PriorityQueue<Vertex<T>> pq;
 
-    public DijkstraSearch(WeightedGraph<V> graph) {
-        this.graph = graph;
-    }
+    public DijkstraSearch(WeightedGraph<T> graph, T source) {
+        edgeTo = new HashMap<>();
+        distTo = new HashMap<>();
+        pq = new PriorityQueue<>(Comparator.comparingDouble(distTo::get));
 
-    public void search(Vertex<V> start) {
-        dist.put(start, 0.0);
-        PriorityQueue<Vertex<V>> pq = new PriorityQueue<>(Comparator.comparing(dist::get));
-        pq.add(start);
-        prev.put(start, null);
+        for (T v : graph.vertices.keySet()) {
+            distTo.put(v, Double.POSITIVE_INFINITY);
+        }
+        distTo.put(source, 0.0);
+        Vertex<T> sourceVertex = graph.getVertex(source);
+        if (sourceVertex != null) {
+            pq.offer(sourceVertex);
+        } else {
+            System.err.println("Source vertex is null: " + source);
+        }
 
         while (!pq.isEmpty()) {
-            Vertex<V> current = pq.poll();
-            for (Edge<Vertex<V>> edge : current.getEdges()) {
-                Vertex<V> neighbor = edge.getDest();
-                double newDist = dist.get(current) + edge.getWeight();
-                if (newDist < dist.getOrDefault(neighbor, Double.MAX_VALUE)) {
-                    dist.put(neighbor, newDist);
-                    prev.put(neighbor, current);
-                    pq.add(neighbor);
-                }
+            Vertex<T> v = pq.poll();
+            if (v == null) continue; // Safeguard against null vertices
+            for (Map.Entry<Vertex<T>, Double> entry : v.getAdjacentVertices().entrySet()) {
+                relax(v, entry.getKey(), entry.getValue());
             }
         }
     }
 
-    public List<Vertex<V>> getPath(Vertex<V> end) {
-        List<Vertex<V>> path = new ArrayList<>();
-        for (Vertex<V> at = end; at != null; at = prev.get(at)) {
-            path.add(at);
+    private void relax(Vertex<T> v, Vertex<T> w, double weight) {
+        T vData = v.getData();
+        T wData = w.getData();
+        if (distTo.get(wData) == null) {
+            System.err.println("distTo missing entry for: " + wData);
+            return;
         }
-        Collections.reverse(path);
+        if (distTo.get(wData) > distTo.get(vData) + weight) {
+            distTo.put(wData, distTo.get(vData) + weight);
+            edgeTo.put(wData, vData);
+            pq.remove(w); // Remove old instance of w with the higher distance
+            pq.offer(w); // Add new instance of w with the updated distance
+        }
+    }
+
+    @Override
+    public Iterable<T> pathTo(T destination) {
+        if (!distTo.containsKey(destination) || distTo.get(destination) == Double.POSITIVE_INFINITY) {
+            return null; // No path to destination
+        }
+
+        LinkedList<T> path = new LinkedList<>();
+        for (T x = destination; x != null; x = edgeTo.get(x)) {
+            path.push(x);
+        }
         return path;
     }
 }

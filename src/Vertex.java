@@ -1,31 +1,23 @@
 import java.util.*;
 
-public class Vertex<V> {
-    private V data;
-    private List<Edge<Vertex<V>>> edges;
+public class Vertex<T> {
+    private T data;
+    private Map<Vertex<T>, Double> adjacentVertices;
 
-    public Vertex(V data) {
+    public Vertex(T data) {
         this.data = data;
-        this.edges = new ArrayList<>();
+        adjacentVertices = new HashMap<>();
     }
 
-    public void addEdge(Vertex<V> destination, double weight) {
-        Edge<Vertex<V>> newEdge = new Edge<>(this, destination, weight);
-        edges.add(newEdge);
+    public void addAdjacentVertex(Vertex<T> destination, double weight) {
+        adjacentVertices.put(destination, weight);
     }
 
-    // Getters
-    public V getData() {
+    public Map<Vertex<T>, Double> getAdjacentVertices() {
+        return adjacentVertices;
+    }
+
+    public T getData() {
         return data;
-    }
-
-    public List<Edge<Vertex<V>>> getEdges() {
-        return edges;
-    }
-
-    // Overriding toString to return Vertex data directly
-    @Override
-    public String toString() {
-        return data.toString();
     }
 }

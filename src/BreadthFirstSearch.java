@@ -1,35 +1,43 @@
 import java.util.*;
 
-public class BreadthFirstSearch<V> implements Search<V> {
-    private WeightedGraph<V> graph;
-    private Map<Vertex<V>, Vertex<V>> prev = new HashMap<>();
+public class BreadthFirstSearch<T> implements Search<T> {
+    private Map<T, T> edgeTo;
+    private Set<T> marked;
 
-    public BreadthFirstSearch(WeightedGraph<V> graph) {
-        this.graph = graph;
+    public BreadthFirstSearch(WeightedGraph<T> graph, T source) {
+        edgeTo = new HashMap<>();
+        marked = new HashSet<>();
+        bfs(graph, source);
     }
 
-    public void search(Vertex<V> start) {
-        Queue<Vertex<V>> queue = new LinkedList<>();
-        queue.add(start);
-        prev.put(start, null);
+    private void bfs(WeightedGraph<T> graph, T source) {
+        Queue<T> queue = new LinkedList<>();
+        marked.add(source);
+        queue.offer(source);
 
         while (!queue.isEmpty()) {
-            Vertex<V> current = queue.poll();
-            for (Edge<Vertex<V>> edge : current.getEdges()) {
-                if (!prev.containsKey(edge.getDest())) {
-                    queue.add(edge.getDest());
-                    prev.put(edge.getDest(), current);
+            T v = queue.poll();
+            Vertex<T> current = graph.getVertex(v);
+            for (Vertex<T> w : current.getAdjacentVertices().keySet()) {
+                if (!marked.contains(w.getData())) {
+                    edgeTo.put(w.getData(), v);
+                    marked.add(w.getData());
+                    queue.offer(w.getData());
                 }
             }
         }
     }
 
-    public List<Vertex<V>> getPath(Vertex<V> end) {
-        List<Vertex<V>> path = new ArrayList<>();
-        for (Vertex<V> at = end; at != null; at = prev.get(at)) {
-            path.add(at);
+    @Override
+    public Iterable<T> pathTo(T destination) {
+        if (!marked.contains(destination)) {
+            return null;
         }
-        Collections.reverse(path);
+
+        LinkedList<T> path = new LinkedList<>();
+        for (T x = destination; x != null; x = edgeTo.get(x)) {
+            path.push(x);
+        }
         return path;
     }
 }
