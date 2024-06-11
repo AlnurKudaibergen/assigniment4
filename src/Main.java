@@ -1,4 +1,4 @@
-import java.util.*;
+
 
 
 public class Main {
@@ -7,9 +7,9 @@ public class Main {
         WeightedGraph<String> weightedGraph = new WeightedGraph<>(true);
         fillWithWeights(weightedGraph);
 
-//        System.out.println("Dijkstra:");
-//        Search<String> dijkstra = new DijkstraSearch<>(weightedGraph, "Almaty");
-//        outputPath(dijkstra, "Kyzylorda");
+        System.out.println("Dijkstra:");
+        Search<String> dijkstra = new DijkstraSearch<>(weightedGraph, "Almaty");
+        outputPath(dijkstra, "Kyzylorda");
 
         System.out.println("--------------------------------");
 
@@ -21,7 +21,7 @@ public class Main {
 //        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
 //        outputPath(dfs, "Kyzylorda");
 //
-//        System.out.println("--------------------------------");
+        System.out.println("--------------------------------");
 
         System.out.println("BFS:");
         Search<String> bfs = new BreadthFirstSearch<>(graph, "Almaty");

@@ -8,7 +8,7 @@ public class DijkstraSearch<T> implements Search<T> {
     public DijkstraSearch(WeightedGraph<T> graph, T source) {
         edgeTo = new HashMap<>();
         distTo = new HashMap<>();
-        pq = new PriorityQueue<>(Comparator.comparingDouble(distTo::get));
+        pq = new PriorityQueue<>(Comparator.comparingDouble(v -> distTo.getOrDefault(v.getData(), Double.POSITIVE_INFINITY)));
 
         for (T v : graph.vertices.keySet()) {
             distTo.put(v, Double.POSITIVE_INFINITY);
