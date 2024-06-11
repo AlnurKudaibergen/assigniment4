@@ -10,18 +10,19 @@ public class Main {
 
         System.out.println("--------------------------------");
 
-        // Unweighted graph for BFS and DFS
-//        WeightedGraph<String> graph = new WeightedGraph<>(true);
+        //  graph for BFS and DFS
+        WeightedGraph<String> graph = new WeightedGraph<>(false);
+        fillWithWeights(graph);
 
-//        System.out.println("DFS:");
-//        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
-//        outputPath(dfs, "Kyzylorda");
+        System.out.println("DFS:");
+        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
+        outputPath(dfs, "Astana");
 
         System.out.println("--------------------------------");
 
         System.out.println("BFS:");
-        Search<String> bfs = new BreadthFirstSearch<>(weightedGraph, "Almaty");
-        outputPath(bfs, "Atyrau");
+        Search<String> bfs = new BreadthFirstSearch<>(graph, "Almaty");
+        outputPath(bfs, "Kyzylorda");
     }
 
     public static void fillWithoutWeights(WeightedGraph<String> graph) {
@@ -32,13 +33,13 @@ public class Main {
         graph.addVertex("Kostanay");
         graph.addVertex("Kyzylorda");
 
-        graph.addEdge("Almaty", "Astana", 2.1);
-        graph.addEdge("Shymkent", "Atyrau", 7.8);
-        graph.addEdge("Atyrau", "Astana", 7.1);
-        graph.addEdge("Almaty", "Shymkent", 7.2);
-        graph.addEdge("Shymkent", "Astana", 3.9);
-        graph.addEdge("Astana", "Kostanay", 3.5);
-        graph.addEdge("Shymkent", "Kyzylorda", 5.4);
+        graph.addEdge("Almaty", "Astana", 0); // 16 - 19
+        graph.addEdge("Shymkent", "Atyrau", 0);
+        graph.addEdge("Atyrau", "Astana", 0);
+        graph.addEdge("Almaty", "Shymkent", 0);
+        graph.addEdge("Shymkent", "Astana", 0);
+        graph.addEdge("Astana", "Kostanay", 0);
+        graph.addEdge("Shymkent", "Kyzylorda", 0);
     }
 
     public static void fillWithWeights(WeightedGraph<String> graph) {
@@ -50,9 +51,9 @@ public class Main {
         graph.addVertex("Kyzylorda");
 
         graph.addEdge("Almaty", "Astana", 2.1);
+        graph.addEdge("Almaty", "Shymkent", 7.2);
         graph.addEdge("Shymkent", "Atyrau", 7.8);
         graph.addEdge("Atyrau", "Astana", 7.1);
-        graph.addEdge("Almaty", "Shymkent", 7.2);
         graph.addEdge("Shymkent", "Astana", 3.9);
         graph.addEdge("Astana", "Kostanay", 3.5);
         graph.addEdge("Shymkent", "Kyzylorda", 5.4);
