@@ -2,24 +2,20 @@ import java.util.Objects;
 
 public class Edge<Vertex> {
     private Vertex source;
-    private Vertex destination;
+    private Vertex dest;
     private Double weight;
 
-    // Constructor for weighted edge
-    public Edge(Vertex source, Vertex destination, Double weight) {
+    public Edge(Vertex source, Vertex dest, Double weight) {
         this.source = source;
-        this.destination = destination;
+        this.dest = dest;
         this.weight = weight;
     }
 
-    // Constructor for unweighted edge, initializes weight to null
-    public Edge(Vertex source, Vertex destination) {
+    public Edge(Vertex source, Vertex dest) {
         this.source = source;
-        this.destination = destination;
-        this.weight = null;
+        this.dest = dest;
     }
 
-    // Setters and getters for source vertex
     public void setSource(Vertex source) {
         this.source = source;
     }
@@ -28,16 +24,14 @@ public class Edge<Vertex> {
         return source;
     }
 
-    // Setters and getters for destination vertex
-    public void setDestination(Vertex destination) {
-        this.destination = destination;
+    public void setDest(Vertex dest) {
+        this.dest = dest;
     }
 
-    public Vertex getDestination() {
-        return destination;
+    public Vertex getDest() {
+        return dest;
     }
 
-    // Setters and getters for weight of the edge
     public void setWeight(Double weight) {
         this.weight = weight;
     }
@@ -47,19 +41,14 @@ public class Edge<Vertex> {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true; // Fast comparison for reference equality
-        if (other == null || getClass() != other.getClass()) return false; // Type check
+    public boolean equals(Object o) {
+        if (this == o) return true; // references compared
 
-        Edge<?> otherEdge = (Edge<?>) other; // Safe cast after type checking
+        if (o == null || getClass() != o.getClass()) return false;
 
-        // Compare source and destination without considering weight
-        return Objects.equals(source, otherEdge.source) && Objects.equals(destination, otherEdge.destination);
-    }
+        Edge<?> otherEdge = (Edge<?>) o;
 
-    @Override
-    public int hashCode() {
-        // Include source and destination in hash calculation
-        return Objects.hash(source, destination);
+        return Objects.equals(this.source, otherEdge.source) &&
+                Objects.equals(this.dest, otherEdge.dest);
     }
 }
